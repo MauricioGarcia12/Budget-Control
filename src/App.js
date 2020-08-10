@@ -1,22 +1,40 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import Pregunta from './components/Pregunta'
 import Formulario from './components/Formulario'
 import Listado from './components/Listado'
+import ControlPresupuesto from './components/ControlPresupuesto'
 
 
 function App() {
+  
   //definir el state
   const [presupuesto,guardarPresupuesto]=useState(0);
   const [restante,guardarRestante]=useState(0);
   const [mostrarpregunta,actualizarPregunta]=useState(true);
   const [gastos, guardarGastos]=useState([]);
+  const [gasto,guardarGasto]=useState({});
+  const [creargasto,guardarCrearGasto]=useState(false)
 
-  //cuando agregamos un nuevo gasto
-  const agregarNuevoGasto = gasto =>{
-    guardarGastos([
-      ...gastos,gasto
-    ])
-  }
+   //useEffect que actualiza el restante
+   useEffect( () => {
+    if(creargasto) {
+      //AGREGA NUEVO PRESUPUESTO
+      guardarGastos ([
+        ...gastos,
+        gasto
+      ])
+      //RESTA DEL PRESUPUESTO ACTUAL
+      const presupuestoRestante=restante-gasto.cantidad;
+      guardarRestante(presupuestoRestante);
+
+      guardarCrearGasto(false)
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gasto,creargasto,gasto,gastos,restante])
+
+
+  
 
   return (
     <div className='container'>
@@ -33,12 +51,17 @@ function App() {
           <div className='row'>
               <div className='one-half column'>
                   <Formulario
-                    agregarNuevoGasto={agregarNuevoGasto}
+                    guardarGasto={guardarGasto}
+                    guardarCrearGasto={guardarCrearGasto}
                   />
               </div>
               <div className='one-half column'>
                   <Listado
                   gastos={gastos}
+                  />
+                  <ControlPresupuesto
+                  presupuesto={presupuesto}
+                  restante={restante}
                   />
               </div>
           </div>
