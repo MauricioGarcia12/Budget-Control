@@ -1,5 +1,6 @@
 import React,{Fragment} from 'react'
 import {revisarPresupuesto} from '../../src/helpers'
+import PropTypes from 'prop-types'
 
 const ControlPresupuesto = ({presupuesto,restante}) => {
     return ( 
@@ -13,5 +14,9 @@ const ControlPresupuesto = ({presupuesto,restante}) => {
         </Fragment>
      );
 }
- 
+ControlPresupuesto.propTypes={
+    restante:PropTypes.number.isRequired,
+    presupuesto:PropTypes.number.isRequired
+
+}
 export default ControlPresupuesto;
